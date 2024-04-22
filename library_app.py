@@ -1,19 +1,21 @@
 import os
 
+
 class libraryApp:
-    def __init__(self, isbn, title, author, genre):
+    def __init__(self, isbn, title, author, genre, borrowed):
         self.isbn = isbn
         self.title = title
         self.author = author
         self.genre = genre
-        self.borrowed = False
+        self.borrowed = borrowed
+        
 #insert load_books below
     def load_books(book_list, file_path):
         if os.path.exists(file_path):
             with open(file_path, 'r') as file:
                 for line in file:
-                    isbn, title, author, genre = line.strip().split(',')
-                    book_list.append(libraryApp(isbn, title, author, genre))
+                    isbn, title, author, genre, borrowed = line.strip().split(',')
+                    book_list.append(libraryApp(isbn, title, author, genre,borrowed == 'True'))
             return len(book_list)
         else:
             print("File not found.")
@@ -114,10 +116,11 @@ class libraryApp:
             return 0
 
 #insert below
+    @staticmethod
     def main():
         book_list = []
         file_path = input("Enter the path to the CSV data file: ")
-        num_books = libraryApp.load_books(book_list, file_path)
+        num_books = libraryApp.load_books(book_list,file_path)
         print(f"{num_books} books loaded successfully.")
 
         menu_heading = "Library Management System Menu"
@@ -150,4 +153,7 @@ class libraryApp:
             elif choice.upper() == 'Q':
                 libraryApp.save_books(book_list, file_path)
                 print("Exiting the program.")
-                break
+                
+if __name__ == "__main__":
+    libraryApp.main()
+
